@@ -12,7 +12,7 @@ import dagger.android.ContributesAndroidInjector
 abstract class ActivityBuilderModule {
 
     @ContributesAndroidInjector(
-        modules = [AppViewModel::class]
+        modules = []
     )
     abstract fun contributeTopStoriesListActivity(): TopStoriesListActivity
 
