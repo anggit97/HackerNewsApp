@@ -10,6 +10,7 @@ import com.anggit97.hackernews.R
 import com.anggit97.hackernews.base.BaseActivity
 import com.anggit97.hackernews.data.Comment
 import com.anggit97.hackernews.data.TopStoryDetail
+import com.anggit97.hackernews.utils.date.DateUtils
 import com.anggit97.hackernews.utils.ext.setGone
 import com.anggit97.hackernews.utils.ext.setVisible
 import com.anggit97.hackernews.utils.state.LoaderState
@@ -46,7 +47,7 @@ class TopStoryDetailActivity : BaseActivity() {
             with(data){
                 tvTitleStory.text = title
                 tvByStory.text = getString(R.string.create_by_template, by)
-                tvDateStory.text = time.toString()
+                tvDateStory.text = time?.toLong()?.let { DateUtils.parseUnixTimeToFriendlyDate(it) }
                 tvDescStoryBody.text = title
             }
         }

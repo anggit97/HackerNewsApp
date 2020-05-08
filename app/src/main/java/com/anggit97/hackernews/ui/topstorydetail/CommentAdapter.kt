@@ -1,11 +1,13 @@
 package com.anggit97.hackernews.ui.topstorydetail
 
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.anggit97.hackernews.R
 import com.anggit97.hackernews.data.Comment
+import com.anggit97.hackernews.utils.date.DateUtils
 import kotlinx.android.synthetic.main.row_item_comment.view.*
 
 /**
@@ -13,19 +15,20 @@ import kotlinx.android.synthetic.main.row_item_comment.view.*
  */
 class CommentAdapter: RecyclerView.Adapter<CommentAdapter.ViewHolder>() {
 
-    private val commentList = mutableListOf<Comment>()
+    private var commentList = mutableListOf<Comment>()
 
     fun addItem(comment: Comment){
-        commentList.add(comment)
+        this.commentList.add(comment)
         notifyDataSetChanged()
     }
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view){
         fun bindView(comment: Comment) {
             with(itemView){
-                tvCommentText.text = comment.text
+                @Suppress("DEPRECATION")
+                tvCommentText.text = Html.fromHtml(comment.text)
                 tvCommentby.text = comment.by
-                tvCommentTime.text = comment.time.toString()
+                tvCommentTime.text = comment.time?.toLong()?.let { DateUtils.parseUnixTimeToFriendlyDate(it) }
             }
         }
     }

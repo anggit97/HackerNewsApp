@@ -65,8 +65,8 @@ class TopStoryDetailViewModel @Inject constructor(
             withContext(Dispatchers.Main){
                 _state.value = LoaderState.HideLoading
                 when(result){
-                    is ResultState.Success -> result.data
-                    is ResultState.GeneralError -> result.error
+                    is ResultState.Success -> _items.value = result.data
+                    is ResultState.GeneralError -> _error.value = result.error
                     else -> _networkError.value = true
                 }
             }
