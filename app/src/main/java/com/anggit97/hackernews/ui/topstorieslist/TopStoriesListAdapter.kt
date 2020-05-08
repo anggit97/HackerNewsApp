@@ -1,11 +1,13 @@
 package com.anggit97.hackernews.ui.topstorieslist
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.anggit97.hackernews.R
 import com.anggit97.hackernews.data.TopStoryDetail
+import com.anggit97.hackernews.ui.topstorydetail.TopStoryDetailActivity
 import kotlinx.android.synthetic.main.row_item_top_stories.view.*
 
 /**
@@ -26,6 +28,12 @@ class TopStoriesListAdapter: RecyclerView.Adapter<TopStoriesListAdapter.ViewHold
                 tvTitleStory.text = topStoryDetail.title
                 tvCommentCount.text = (topStoryDetail.kids?.size ?: 0).toString()
                 tvScore.text = (topStoryDetail.score ?: 0).toString()
+            }
+
+            itemView.setOnClickListener {
+                val intent = Intent(itemView.context, TopStoryDetailActivity::class.java)
+                intent.putExtra(TopStoryDetailActivity.STORY_ITEM_KEY, topStoryDetail)
+                itemView.context.startActivity(intent)
             }
         }
     }

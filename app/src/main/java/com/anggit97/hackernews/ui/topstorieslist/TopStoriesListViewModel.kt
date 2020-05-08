@@ -29,10 +29,16 @@ class TopStoriesListViewModel @Inject constructor(
     dispatcher: SchedulerProvider
 ): BaseViewModel(dispatcher), TopStoriesListViewModelContract{
 
+    /**
+     * Story Detail
+     */
     private val _items = MutableLiveData<TopStoryDetail>()
     val items : LiveData<TopStoryDetail>
     get() = _items
 
+    /**
+     * List Story Id
+     */
     private val _ids = MutableLiveData<List<Int>>()
     val ids : LiveData<List<Int>>
     get() = _ids

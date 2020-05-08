@@ -6,4 +6,5 @@
     <dimen name="dimen_5">5dp</dimen>
     <dimen name="dimen_7">7dp</dimen>
     <dimen name="dimen_24">24dp</dimen>
+    <dimen name="dimen_36">36dp</dimen>
 </resources>

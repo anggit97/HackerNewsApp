@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">Hacker News</string>
     <string name="score">Score :</string>
+    <string name="top_stories">Top Stories</string>
+    <string name="story_detail">Story Detail</string>
+    <string name="ex_story_title">Story Title Dummy</string>
+    <string name="description">Deskripsi:</string>
+    <string name="description_body">In previous work, there was no evidence that these censorship features affected users with accounts that are not registered to China-based phone numbers. These users could send and receive messages that users with China-registered accounts could not. In this report, we show that documents and images shared among non-China-registered accounts are subject to content surveillance and are used to build up the database WeChat uses to censor China-registered accounts. By engaging in analysis of WeChat privacy agreements and policy documents, we find that the company provides no clear reference or explanation of the content surveillance features and therefore absent performing their own technical experiments, users cannot determine if, and why, content surveillance was being applied. Consequently, non-China-based users who send sensitive content over WeChat may be unwittingly contributing to political censorship in China.</string>
+    <string name="comment_header">Komentar</string>
+    <string name="ex_comment">Also a thread by Citizen Lab researcher:</string>
+    <string name="create_by_template">By %s</string>
 </resources>

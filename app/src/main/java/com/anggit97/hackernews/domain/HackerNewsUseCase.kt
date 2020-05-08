@@ -1,5 +1,6 @@
 package com.anggit97.hackernews.domain
 
+import com.anggit97.hackernews.data.Comment
 import com.anggit97.hackernews.data.TopStoryDetail
 import com.anggit97.hackernews.utils.safeApiCall
 import com.anggit97.hackernews.utils.safeApiErrorHandling
@@ -27,6 +28,17 @@ class HackerNewsUseCase @Inject constructor(
     suspend fun getTopStoryDetail(storyId: String): ResultState<TopStoryDetail>{
         return safeApiCall {
             val response = repository.getStoryDetail(storyId)
+            if (response.isSuccessful){
+                ResultState.Success(response.body()!!)
+            }else{
+                safeApiErrorHandling(response)
+            }
+        }
+    }
+
+    suspend fun getComment(commentId: String): ResultState<Comment>{
+        return safeApiCall {
+            val response = repository.getComment(commentId)
             if (response.isSuccessful){
                 ResultState.Success(response.body()!!)
             }else{
