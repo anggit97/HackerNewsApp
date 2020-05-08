@@ -1,5 +1,7 @@
 package com.anggit97.hackernews.ui.topstorydetail
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -13,15 +15,18 @@ import com.anggit97.hackernews.data.TopStoryDetail
 import com.anggit97.hackernews.utils.date.DateUtils
 import com.anggit97.hackernews.utils.ext.setGone
 import com.anggit97.hackernews.utils.ext.setVisible
+import com.anggit97.hackernews.utils.ext.showImageDrawable
 import com.anggit97.hackernews.utils.state.LoaderState
-import com.anggit97.hackernews.utils.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_top_story_detail.*
 import javax.inject.Inject
+
 
 class TopStoryDetailActivity : BaseActivity() {
 
     companion object{
         const val STORY_ITEM_KEY = "story_item_key"
+        const val REQUEST_CODE = 101
+        const val RESULT_DATA_KEY = "result_data_key"
     }
 
     @Inject
@@ -30,6 +35,8 @@ class TopStoryDetailActivity : BaseActivity() {
 
     private lateinit var commentAdapter: CommentAdapter
     private var storyItems : TopStoryDetail? = null
+    private var favouriteClick = false
+    private var favouriteTitle = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +47,38 @@ class TopStoryDetailActivity : BaseActivity() {
         initRecyclerViewComment()
         bindStoryDetailToView()
         fetchData()
+        onClickListener()
+    }
+
+    private fun onClickListener() {
+        ivBack.setOnClickListener {
+            finishAndSendBackResult()
+        }
+
+        ivStar.setOnClickListener {
+            handleFavouriteState()
+        }
+    }
+
+    override fun onBackPressed() {
+        finishAndSendBackResult()
+    }
+
+    private fun handleFavouriteState() {
+        if (!favouriteClick){
+            ivStar.showImageDrawable(R.drawable.ic_star_gold_24dp)
+        }else{
+            ivStar.showImageDrawable(R.drawable.ic_star_border_gold_24dp)
+        }
+        favouriteTitle = storyItems?.title ?: ""
+        favouriteClick = !favouriteClick
+    }
+
+    private fun finishAndSendBackResult(){
+        val returnIntent = Intent()
+        if (favouriteClick) returnIntent.putExtra(RESULT_DATA_KEY, favouriteTitle)
+        setResult(Activity.RESULT_OK, returnIntent)
+        finish()
     }
 
     private fun bindStoryDetailToView() {
@@ -49,6 +88,7 @@ class TopStoryDetailActivity : BaseActivity() {
                 tvByStory.text = getString(R.string.create_by_template, by)
                 tvDateStory.text = time?.toLong()?.let { DateUtils.parseUnixTimeToFriendlyDate(it) }
                 tvDescStoryBody.text = title
+                tvScoreStory.text = getString(R.string.score_template, score.toString())
             }
         }
     }

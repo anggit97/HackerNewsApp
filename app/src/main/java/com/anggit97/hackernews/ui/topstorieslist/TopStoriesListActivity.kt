@@ -1,5 +1,7 @@
 package com.anggit97.hackernews.ui.topstorieslist
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -8,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.anggit97.hackernews.R
 import com.anggit97.hackernews.base.BaseActivity
 import com.anggit97.hackernews.data.TopStoryDetail
+import com.anggit97.hackernews.ui.topstorydetail.TopStoryDetailActivity
 import com.anggit97.hackernews.utils.ext.setGone
 import com.anggit97.hackernews.utils.ext.setVisible
 import com.anggit97.hackernews.utils.state.LoaderState
@@ -33,6 +36,7 @@ class TopStoriesListActivity : BaseActivity() {
 
     private fun initRecyclerView() {
         adapter = TopStoriesListAdapter()
+        adapter.setActivity(this)
         rvTopStories.layoutManager = GridLayoutManager(this, 2)
         rvTopStories.adapter = adapter
     }
@@ -78,6 +82,19 @@ class TopStoriesListActivity : BaseActivity() {
 
         top20Story.forEach {
             viewModel.getTopStoryDetail(it.toString())
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == TopStoryDetailActivity.REQUEST_CODE){
+            if (resultCode == Activity.RESULT_OK){
+                val result = data?.getStringExtra(TopStoryDetailActivity.RESULT_DATA_KEY)
+                result?.let { title ->
+                    tvFavouriteStoryTitle.setVisible()
+                    tvFavouriteStoryTitle.text = title
+                }
+            }
         }
     }
 

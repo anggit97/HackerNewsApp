@@ -16,14 +16,22 @@ import kotlinx.android.synthetic.main.row_item_top_stories.view.*
 class TopStoriesListAdapter: RecyclerView.Adapter<TopStoriesListAdapter.ViewHolder>() {
 
     private var topStoriesList = mutableListOf<TopStoryDetail>()
+    private var activity: TopStoriesListActivity? = null
 
     fun addItem(item: TopStoryDetail){
         this.topStoriesList.add(item)
         notifyDataSetChanged()
     }
 
+    fun setActivity(activity: TopStoriesListActivity){
+        this.activity = activity
+    }
+
     class ViewHolder(view: View): RecyclerView.ViewHolder(view){
-        fun bindView(topStoryDetail: TopStoryDetail) {
+        fun bindView(
+            topStoryDetail: TopStoryDetail,
+            activity: TopStoriesListActivity?
+        ) {
             with(itemView){
                 tvTitleStory.text = topStoryDetail.title
                 tvCommentCount.text = (topStoryDetail.kids?.size ?: 0).toString()
@@ -33,7 +41,7 @@ class TopStoriesListAdapter: RecyclerView.Adapter<TopStoriesListAdapter.ViewHold
             itemView.setOnClickListener {
                 val intent = Intent(itemView.context, TopStoryDetailActivity::class.java)
                 intent.putExtra(TopStoryDetailActivity.STORY_ITEM_KEY, topStoryDetail)
-                itemView.context.startActivity(intent)
+                activity?.startActivityForResult(intent, TopStoryDetailActivity.REQUEST_CODE)
             }
         }
     }
@@ -48,6 +56,6 @@ class TopStoriesListAdapter: RecyclerView.Adapter<TopStoriesListAdapter.ViewHold
     override fun getItemCount(): Int = topStoriesList.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindView(topStoriesList[position])
+        holder.bindView(topStoriesList[position], activity)
     }
 }

@@ -26,7 +26,7 @@ class CommentAdapter: RecyclerView.Adapter<CommentAdapter.ViewHolder>() {
         fun bindView(comment: Comment) {
             with(itemView){
                 @Suppress("DEPRECATION")
-                tvCommentText.text = Html.fromHtml(comment.text)
+                tvCommentText.text = Html.fromHtml(comment.text ?: "")
                 tvCommentby.text = comment.by
                 tvCommentTime.text = comment.time?.toLong()?.let { DateUtils.parseUnixTimeToFriendlyDate(it) }
             }
