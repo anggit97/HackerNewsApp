@@ -1,12 +1,13 @@
 package com.anggit97.hackernews.ui.topstorieslist
 
 import android.os.Bundle
-import android.util.Log.e
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
 import com.anggit97.hackernews.R
 import com.anggit97.hackernews.base.BaseActivity
+import com.anggit97.hackernews.data.TopStoryDetail
 import com.anggit97.hackernews.utils.ext.setGone
 import com.anggit97.hackernews.utils.ext.setVisible
 import com.anggit97.hackernews.utils.state.LoaderState
@@ -19,12 +20,21 @@ class TopStoriesListActivity : BaseActivity() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: TopStoriesListViewModel
 
+    private lateinit var adapter: TopStoriesListAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_top_stories_list)
         initViewModel()
+        initRecyclerView()
         observeViewModel()
         fetchData()
+    }
+
+    private fun initRecyclerView() {
+        adapter = TopStoriesListAdapter()
+        rvTopStories.layoutManager = GridLayoutManager(this, 2)
+        rvTopStories.adapter = adapter
     }
 
     private fun fetchData() {
@@ -43,6 +53,16 @@ class TopStoriesListActivity : BaseActivity() {
                 handleLoadingState(it)
             }
         })
+
+        viewModel.items.observe(this, Observer {
+            it?.let {
+                handleStoryDetailResponse(it)
+            }
+        })
+    }
+
+    private fun handleStoryDetailResponse(data: TopStoryDetail) {
+        adapter.addItem(data)
     }
 
     private fun handleLoadingState(loading: LoaderState) {
@@ -54,7 +74,11 @@ class TopStoriesListActivity : BaseActivity() {
     }
 
     private fun handleIdsResponse(data: List<Int>) {
-        e("DATA", data.toString())
+        val top20Story = data.take(50)
+
+        top20Story.forEach {
+            viewModel.getTopStoryDetail(it.toString())
+        }
     }
 
     @Suppress("DEPRECATION")

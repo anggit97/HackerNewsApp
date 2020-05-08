@@ -29,8 +29,8 @@ class TopStoriesListViewModel @Inject constructor(
     dispatcher: SchedulerProvider
 ): BaseViewModel(dispatcher), TopStoriesListViewModelContract{
 
-    private val _items = MutableLiveData<ArrayList<TopStoryDetail>>()
-    val items : LiveData<ArrayList<TopStoryDetail>>
+    private val _items = MutableLiveData<TopStoryDetail>()
+    val items : LiveData<TopStoryDetail>
     get() = _items
 
     private val _ids = MutableLiveData<List<Int>>()
@@ -58,6 +58,10 @@ class TopStoriesListViewModel @Inject constructor(
     val state: LiveData<LoaderState>
         get() = _state
 
+
+    /**
+     * Get Top Stories
+     */
     override fun getTopStories() {
         _state.value = LoaderState.ShowLoading
         launch {
@@ -73,7 +77,21 @@ class TopStoriesListViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Get Story Detail
+     */
     override fun getTopStoryDetail(storyId: String) {
-
+        _state.value = LoaderState.ShowLoading
+        launch {
+            val result = useCase.getTopStoryDetail(storyId)
+            withContext(Dispatchers.Main){
+                _state.value = LoaderState.HideLoading
+                when(result){
+                    is ResultState.Success -> _items.value = result.data
+                    is ResultState.GeneralError -> _error.value = result.error
+                    else -> _networkError.value = true
+                }
+            }
+        }
     }
 }
